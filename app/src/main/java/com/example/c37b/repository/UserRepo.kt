@@ -3,11 +3,7 @@ package com.example.c37b.repository
 import com.example.c37b.model.UserModel
 
 interface UserRepo {
-//    {
-//        "success":true,
-//        "message":"Verification link sent to your email address",
-//        "userId":"sasas"
-//    }
+
     fun login(
         email: String, password: String,
         callback: (Boolean, String) -> Unit

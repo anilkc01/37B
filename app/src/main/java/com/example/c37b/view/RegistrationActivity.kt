@@ -1,4 +1,4 @@
-package com.example.c37b
+package com.example.c37b.view
 
 import android.app.Activity
 import android.app.DatePickerDialog
@@ -8,10 +8,9 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.Image
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,14 +18,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -51,10 +46,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.c37b.R
+import com.example.c37b.model.UserModel
+import com.example.c37b.repository.UserRepoImpl
 import com.example.c37b.ui.theme.Blue
-import com.example.c37b.ui.theme.C37BTheme
 import com.example.c37b.ui.theme.Purple80
 import com.example.c37b.ui.theme.White
+import com.example.c37b.viewModel.UserViewModel
 import java.util.Calendar
 
 class RegistrationActivity : ComponentActivity() {
@@ -69,7 +67,13 @@ class RegistrationActivity : ComponentActivity() {
 
 @Composable
 fun RegisterBody() {
+
+    val userViewModel = UserViewModel(UserRepoImpl())
+
     var email by remember { mutableStateOf("") }
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
+    var gender by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var visibility by remember { mutableStateOf(false) }
 
@@ -133,7 +137,66 @@ fun RegisterBody() {
             )
 
 
-
+            Spacer(modifier = Modifier.height(30.dp))
+            OutlinedTextField(
+                value = firstName,
+                onValueChange = { data ->
+                    firstName = data
+                },
+                placeholder = {
+                    Text("First name")
+                },
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Purple80,
+                    focusedContainerColor = Purple80,
+                    focusedIndicatorColor = Blue,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp)
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            OutlinedTextField(
+                value = lastName,
+                onValueChange = { data ->
+                    lastName = data
+                },
+                placeholder = {
+                    Text("Last Name")
+                },
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Purple80,
+                    focusedContainerColor = Purple80,
+                    focusedIndicatorColor = Blue,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp)
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            OutlinedTextField(
+                value = gender,
+                onValueChange = { data ->
+                    gender = data
+                },
+                placeholder = {
+                    Text("Gender")
+                },
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Purple80,
+                    focusedContainerColor = Purple80,
+                    focusedIndicatorColor = Blue,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 15.dp)
+            )
             Spacer(modifier = Modifier.height(30.dp))
             OutlinedTextField(
                 value = email,
@@ -154,7 +217,8 @@ fun RegisterBody() {
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp)
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(30.dp))
+
             OutlinedTextField(
                 value = selectedDate,
                 onValueChange = { data ->
@@ -246,18 +310,38 @@ fun RegisterBody() {
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
-                    editor.putString("email", email)
-                    editor.putString("password", password)
-                    editor.putString("date", selectedDate)
 
-                    editor.apply()
-                    Toast.makeText(context,
-                        "Registration success",
-                        Toast.LENGTH_SHORT).show()
+                    userViewModel.register(email, password){success,message,userId->
+                        if(success){
+                            val model = UserModel(
+                                id = userId,
+                                firstName = firstName,
+                                lastName = lastName,
+                                gender = gender,
+                                dob = selectedDate,
+                                email = email
+                            )
+                            userViewModel.addUserToDatabase(userId,model){success,message->
+                                if(success){
+                                    Toast.makeText(context, "Registration successful", Toast.LENGTH_SHORT).show()
+                                    activity.finish()
 
-                    activity.finish()
+                                }else{
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                }
+                            }
+
+
+                        }else{
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        }
+
+                    }
+
                 }
-            }) {
+            },
+                modifier = Modifier.fillMaxWidth()
+                ) {
                 Text("Register")
             }
 

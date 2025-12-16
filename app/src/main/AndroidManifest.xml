@@ -14,7 +14,22 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.C37B">
         <activity
-            android:name=".SplashActivity"
+            android:name=".view.AddProduct"
+            android:exported="false"
+            android:label="@string/title_activity_add_product"
+            android:theme="@style/Theme.C37B" />
+        <activity
+            android:name=".view.HomeScreen"
+            android:exported="false"
+            android:label="@string/title_activity_home_screen"
+            android:theme="@style/Theme.C37B" />
+        <activity
+            android:name=".view.ForgotPassword"
+            android:exported="false"
+            android:label="@string/title_activity_forgot_password"
+            android:theme="@style/Theme.C37B" />
+        <activity
+            android:name=".view.SplashActivity"
             android:exported="true"
             android:label="@string/title_activity_splash"
             android:theme="@style/Theme.C37B">
@@ -25,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RegistrationActivity"
+            android:name=".view.RegistrationActivity"
             android:exported="true"
             android:label="@string/title_activity_registration"
             android:theme="@style/Theme.C37B">
@@ -36,7 +51,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".view.LoginActivity"
             android:exported="true"
             android:label="@string/title_activity_login"
             android:theme="@style/Theme.C37B">
@@ -47,7 +62,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DashboardActivity"
+            android:name=".view.DashboardActivity"
             android:exported="true"
             android:label="@string/title_activity_dashboard"
             android:theme="@style/Theme.C37B">

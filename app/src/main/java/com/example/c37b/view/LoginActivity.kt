@@ -1,4 +1,4 @@
-package com.example.c37b
+package com.example.c37b.view
 
 import android.app.Activity
 import android.content.Context
@@ -30,7 +30,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,10 +49,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.c37b.R
+import com.example.c37b.repository.UserRepoImpl
 import com.example.c37b.ui.theme.Blue
-import com.example.c37b.ui.theme.C37BTheme
 import com.example.c37b.ui.theme.Purple80
 import com.example.c37b.ui.theme.White
+import com.example.c37b.viewModel.UserViewModel
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,6 +68,7 @@ class LoginActivity : ComponentActivity() {
 
 @Composable
 fun LoginBody() {
+    val userViewModel = UserViewModel(UserRepoImpl())
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var visibility by remember { mutableStateOf(false) }
@@ -76,8 +78,8 @@ fun LoginBody() {
 
     val sharedPreferences = context.getSharedPreferences("User", Context.MODE_PRIVATE)
 
-    val localEmail : String? = sharedPreferences.getString("email","")
-    val localPassword : String? = sharedPreferences.getString("password","")
+    sharedPreferences.getString("email", "")
+    sharedPreferences.getString("password", "")
 
     Scaffold { padding ->
         Column(
@@ -229,31 +231,61 @@ fun LoginBody() {
                     }
                 }
             )
+            Spacer(modifier = Modifier.height(5.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                Text("Forgot Password?", modifier = Modifier.clickable {
+                    val intent = Intent(
+                        context,
+                        ForgotPassword::class.java
+                    )
 
-            Button(onClick = {
-              if(localEmail == email && localPassword == password){
-                  val intent = Intent(
-                      context,
-                      DashboardActivity::class.java
-                  )
-                  context.startActivity(intent)
-                  activity.finish()
-              }else{
-                  Toast.makeText(context,"Invalid login", Toast.LENGTH_LONG).show()
-              }
+                    context.startActivity(intent)
 
-            }) {
-                Text("Login")
+                })
             }
-            Text("Don't have an account, Signup", modifier = Modifier.clickable {
-                val intent = Intent(
-                    context,
-                    RegistrationActivity::class.java
-                )
+            Spacer(modifier = Modifier.height(20.dp))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Button(onClick = {
+                    if (email != null && password != null) {
+                        userViewModel.login(email, password) { success, message ->
+                            if (success) {
+                                val intent = Intent(
+                                    context,
+                                    DashboardActivity::class.java
+                                )
+                                context.startActivity(intent)
+                                activity.finish()
+                            } else {
+                                Toast.makeText(context, "invalid credentials", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                        }
 
-                context.startActivity(intent)
+                    } else {
+                        Toast.makeText(context, "Please enter all fields", Toast.LENGTH_LONG).show()
+                    }
 
-            })
+                }) {
+                    Text("Login")
+                }
+
+                Text("Don't have an account, Signup", modifier = Modifier.clickable {
+                    val intent = Intent(
+                        context,
+                        RegistrationActivity::class.java
+                    )
+
+                    context.startActivity(intent)
+
+                })
+            }
+
 
         }
     }

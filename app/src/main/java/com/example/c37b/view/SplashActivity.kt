@@ -1,4 +1,4 @@
-package com.example.c37b
+package com.example.c37b.view
 
 import android.app.Activity
 import android.content.Intent
@@ -15,19 +15,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.c37b.ui.theme.Blue
-import com.example.c37b.ui.theme.C37BTheme
+import com.example.c37b.R
 import com.example.c37b.ui.theme.White
 import kotlinx.coroutines.delay
 
@@ -63,15 +59,13 @@ fun SplashBody() {
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(R.drawable.face),
+                painter = painterResource(R.drawable.logo),
                 contentDescription = null,
-                modifier = Modifier.size(70.dp)
+                modifier = Modifier.size(150.dp)
             )
             Spacer(modifier = Modifier.height(70.dp))
 
-            CircularProgressIndicator(
-                color = Blue
-            )
+
         }
     }
 }
