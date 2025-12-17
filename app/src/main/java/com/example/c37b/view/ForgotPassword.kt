@@ -1,5 +1,6 @@
 package com.example.c37b.view
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Bundle
 import android.widget.Toast
@@ -53,6 +54,7 @@ class ForgotPassword : ComponentActivity() {
     }
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForgotPasswordBody() {

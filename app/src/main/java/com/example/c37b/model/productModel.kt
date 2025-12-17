@@ -1,5 +1,8 @@
 package com.example.c37b.model
 
+import android.R.attr.description
+import androidx.compose.runtime.MutableState
+
 
 data class ProductModel(
     var productId : String = "",
@@ -9,7 +12,7 @@ data class ProductModel(
     var price : Double = 0.0,
     var quantity : Int = 0,
     var categoryId : String = "",
-){
+) {
     fun toMap() : Map<String,Any?>{
         return mapOf(
             "productName" to productName,

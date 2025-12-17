@@ -1,5 +1,6 @@
 package com.example.c37b.view
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -66,6 +67,7 @@ class LoginActivity : ComponentActivity() {
     }
 }
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun LoginBody() {
     val userViewModel = UserViewModel(UserRepoImpl())
