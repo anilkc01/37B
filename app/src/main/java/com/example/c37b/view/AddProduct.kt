@@ -1,5 +1,6 @@
 package com.example.c37b.view
 
+import android.annotation.SuppressLint
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -28,13 +29,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.example.c37b.R
 import com.example.c37b.model.ProductModel
 import com.example.c37b.repository.ProductRepoImpl
+import com.example.c37b.repository.commonRepoImpl
+import com.example.c37b.viewModel.CommonViewModel
 import com.example.c37b.viewModel.ProductViewModel
 
+@SuppressLint("ViewModelConstructorInComposable")
 @Composable
 fun AddProduct() {
     val context = LocalContext.current
@@ -45,8 +51,10 @@ fun AddProduct() {
     var quantity by remember { mutableStateOf("") }
     var categoryId by remember { mutableStateOf("") }
     var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var cloudinaryLink by remember {mutableStateOf("")}
 
     var productViewModel = ProductViewModel(ProductRepoImpl())
+    var commonViewModel = CommonViewModel(commonRepoImpl())
 
 
     val imagePickerLauncher =
@@ -54,6 +62,15 @@ fun AddProduct() {
             contract = ActivityResultContracts.GetContent()
         ) { uri ->
             imageUri = uri
+            imageUri?.let {
+                commonViewModel.uploadImage(context,it){success,imageUrl->
+                    if(success){
+                        cloudinaryLink=imageUrl!!.toString()
+                    }else{
+                        Toast.makeText(context, "Image Not Uploaded", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
 
     Scaffold { padding ->
@@ -79,7 +96,12 @@ fun AddProduct() {
                 contentAlignment = Alignment.Center
             ) {
                 if (imageUri == null) {
-                    Text("Tap to select image")
+                    Image(
+                        painter = painterResource(R.drawable.placeholder),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
                 } else {
                     Image(
                         painter = rememberAsyncImagePainter(imageUri),
@@ -135,7 +157,7 @@ fun AddProduct() {
                         price = price.toDoubleOrNull() ?: 0.0,
                         quantity = quantity.toIntOrNull() ?: 0,
                         categoryId = categoryId,
-                        productImage =  ""
+                        productImage =  cloudinaryLink
                     )
 
                     productViewModel.addProduct(product){success,message->

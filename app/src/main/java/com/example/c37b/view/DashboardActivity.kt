@@ -33,6 +33,7 @@ class DashboardActivity : ComponentActivity() {
         }
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DashboardBody(){
@@ -83,4 +84,3 @@ fun DashboardBody(){
         }
     }
 }
-

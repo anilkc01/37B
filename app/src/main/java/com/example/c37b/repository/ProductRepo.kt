@@ -15,6 +15,5 @@ interface ProductRepo {
 
     fun getAllProduct(callback: (Boolean, String, List<ProductModel>?) -> Unit)
 
-
     fun getProductByCategory(categoryId:String,callback: (Boolean, String, List<ProductModel>?) -> Unit)
 }

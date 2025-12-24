@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.example.c37b.R
 import com.example.c37b.model.ProductModel
 import com.example.c37b.repository.ProductRepoImpl
@@ -176,6 +178,11 @@ fun HomeScreen(){
                     .padding(horizontal = 15.dp, vertical = 15.dp)
             ){
                 Column{
+                    AsyncImage(
+                        model = data.productImage,
+                        contentDescription = null,
+                        modifier = Modifier.size(400.dp)
+                    )
                     Text(data.productName)
                     Text(data.description)
                     Text(data.price.toString())
